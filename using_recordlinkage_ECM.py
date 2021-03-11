@@ -41,8 +41,10 @@ df_comb.to_csv("features.csv", index=False)"""
 
 ecm = rl.ECMClassifier()
 matches = ecm.fit_predict(features)
+
+potential_matches = pd.DataFrame(list(matches)) #convert tuple to dataframe
 potential_matches = matches[matches.sum(axis=1) > 1].reset_index(inplace=True)
-potential_matches['score'] = potential_matches.loc[:, 'City':'Hosp_Address'].sum(axix=1)
+potential_matches['score'] = potential_matches.loc[:, 'City':'Hosp_Address'].sum(axis=1)
 #print(matches)
 
 df_comb = pd.DataFrame(potential_matches)
