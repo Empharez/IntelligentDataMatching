@@ -1,3 +1,5 @@
+import pickle
+
 import recordlinkage as rl
 import pandas as pd
 
@@ -41,9 +43,11 @@ df_comb.to_csv("features.csv", index=False)"""
 
 ecm = rl.ECMClassifier()
 matches = ecm.fit_predict(features)
+with open('rf_model.pkl', 'wb') as f:
+    pickle.dump(matches, f)
 
 potential_matches = pd.DataFrame(list(matches)) #convert tuple to dataframe
-potential_matches = matches[matches.sum(axis=1) > 1].reset_index(inplace=True)
+potential_matches = potential_matches[potential_matches.sum(axis=1) > 1].reset_index(inplace=True)
 potential_matches['score'] = potential_matches.loc[:, 'City':'Hosp_Address'].sum(axis=1)
 #print(matches)
 
