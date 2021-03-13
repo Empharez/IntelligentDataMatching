@@ -1,6 +1,6 @@
 import pandas as pd
 import fuzzymatcher
-from .DataMatcher import DataMatcher
+from DataMatcher import DataMatcher
 
 
 class DataMatcherFuzzy(DataMatcher):
