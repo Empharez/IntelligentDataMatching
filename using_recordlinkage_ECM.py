@@ -34,34 +34,18 @@ features = compare.compute(candidates, dfA,
                            dfB)
 
 
-#features_df = features.sum(axis=1).value_counts().sort_index(ascending=False)
-"""features_df = features[features.sum(axis=1) > 1].reset_index()
-print(features_df)
-df_comb = pd.DataFrame(features_df)
-#save as csv file
-df_comb.to_csv("features.csv", index=False)"""
+
 
 ecm = rl.ECMClassifier()
 matches = ecm.fit_predict(features)
-with open('rf_model.pkl', 'wb') as f:
-    pickle.dump(matches, f)
+matches = pd.DataFrame(list(matches))
+print(matches)
 
-potential_matches = pd.DataFrame(list(matches)) #convert tuple to dataframe
-potential_matches = potential_matches[potential_matches.sum(axis=1) > 1].reset_index(inplace=True)
-potential_matches['score'] = potential_matches.loc[:, 'City':'Hosp_Address'].sum(axis=1)
-#print(matches)
 
-df_comb = pd.DataFrame(potential_matches)
+
+
+df_comb = pd.DataFrame(matches)
 #save as csv file
-df_comb.to_csv("matches.csv", index=False)
-"""
+df_comb.to_csv("matches.csv", index=True)
 
-true_linkage = pd.Series(features, index=pd.MultiIndex(matches))
-
-logrg = rl.LogisticRegressionClassifier()
-logrg.fit(features[true_linkage.index], true_linkage)
-
-pred = logrg.predict(matches)
-
-print("pred--->>>", pred)"""
 

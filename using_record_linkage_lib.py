@@ -12,11 +12,9 @@ hospital_reimbursement = pd.read_csv(
     index_col='Provider_Num'
 )
 
-#print(hospital_reimbursement.head())
-#print(hospital_accounts.head())
+
 df_a = pd.DataFrame(hospital_accounts)
 df_b = pd.DataFrame(hospital_reimbursement)
-#print(df_a, df_b)
 
 indexer = rl.Index()
 #indexer.block(left_on='State', right_on='Provider State')
@@ -46,15 +44,9 @@ print(features)
 #print(matched_results.head())
 df_comb = pd.DataFrame(features)
 #save as csv file
-df_comb.to_csv("output2.csv", index=False)
+df_comb.to_csv("output2.csv", index=True)
 
-"""true_linkage = pd.Series(YOUR_GOLDEN_DATA, index=pd.MultiIndex(YOUR_MULTI_INDEX))
 
-logrg = rl.LogisticRegressionClassifier()
-logrg.fit(features[true_linkage.index], true_linkage)
-
-logrg.predict(features)
-"""
 
 # Sum the comparison results.
 features.sum(axis=1).value_counts().sort_index(ascending=False)

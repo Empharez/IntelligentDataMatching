@@ -29,7 +29,6 @@ def sorter(dfA, dfB, left_on, right_on):
     return pairs
 
 
-sorted = sorter(dfA, dfB, "State", "Provider State")
 
 
 # print(sorted)
@@ -59,8 +58,37 @@ def compare_string_with_prob(col_left, col_right, prob, new_col_label):
     return res
 
 
-test = compare_exact_val('City', 'Provider City', 'City')
+"""test = compare_exact_val('City', 'Provider City', 'City')
 test2 = compare_string_with_prob('Facility Name', 'Provider Name', 0.85, "Hosp_Name")
 test3 = compare_string_with_prob('Address', 'Provider Street Address', 0.85, 'Hosp_Address')
 result = comparison(sorted, test, test2, test3,dfA, dfB)
-print(result)
+print(result)"""
+
+
+def compare_data(dfA, dfB, left_on, right_on):
+    pairs = sorter(dfA, dfB, left_on, right_on)
+    compare = rl.Compare()
+    compare.exact('City', 'Provider City', label='City')
+    compare.string('Facility Name',
+                   'Provider Name',
+                   threshold=0.85,
+                   label='Hosp_Name')
+    compare.string('Address',
+                   'Provider Street Address',
+                   method='jarowinkler',
+                   threshold=0.85,
+                   label='Hosp_Address')
+    features = compare.compute(pairs, dfA, dfB)
+    return features
+
+
+# print(test(dfA, dfB, "State", "Provider State"))
+
+def predict_matches(dfA, dfB, left_on, right_on):
+    ecm = rl.ECMClassifier()
+    potential_matches = ecm.fit_predict(compare_data(dfA, dfB, left_on, right_on))
+    matches = pd.DataFrame(list(potential_matches))
+    return matches
+
+
+print(predict_matches(dfA, dfB, "State", "Provider State"))
