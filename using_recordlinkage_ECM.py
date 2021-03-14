@@ -35,17 +35,16 @@ features = compare.compute(candidates, dfA,
 
 
 
+"""
+df_comb = pd.DataFrame(features)
+#save as csv file
+df_comb.to_csv("features.csv", index=False)"""
 
 ecm = rl.ECMClassifier()
 matches = ecm.fit_predict(features)
-matches = pd.DataFrame(list(matches))
-print(matches)
 
 
+potential_matches = pd.DataFrame(list(matches)) #convert tuple to dataframe
 
-
-df_comb = pd.DataFrame(matches)
-#save as csv file
-df_comb.to_csv("matches.csv", index=True)
 
 

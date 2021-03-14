@@ -1,12 +1,13 @@
 import recordlinkage as rl
 import pandas as pd
 
+"""
 dfA = pd.read_csv(
     'https://github.com/chris1610/pbpython/raw/master/data/hospital_account_info.csv'
 )
 dfB = pd.read_csv(
     'https://raw.githubusercontent.com/chris1610/pbpython/master/data/hospital_reimbursement.csv'
-)
+)"""
 
 
 def sorter(dfA, dfB, left_on, right_on):
@@ -27,8 +28,6 @@ def sorter(dfA, dfB, left_on, right_on):
     indexer.sortedneighbourhood(left_on=left_on, right_on=right_on)
     pairs = indexer.index(dfA, dfB)
     return pairs
-
-
 
 
 # print(sorted)
@@ -91,4 +90,4 @@ def predict_matches(dfA, dfB, left_on, right_on):
     return matches
 
 
-print(predict_matches(dfA, dfB, "State", "Provider State"))
+# print(predict_matches(dfA, dfB, "State", "Provider State"))

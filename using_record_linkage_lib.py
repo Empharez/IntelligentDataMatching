@@ -12,9 +12,11 @@ hospital_reimbursement = pd.read_csv(
     index_col='Provider_Num'
 )
 
-
+#print(hospital_reimbursement.head())
+#print(hospital_accounts.head())
 df_a = pd.DataFrame(hospital_accounts)
 df_b = pd.DataFrame(hospital_reimbursement)
+#print(df_a, df_b)
 
 indexer = rl.Index()
 #indexer.block(left_on='State', right_on='Provider State')
@@ -41,18 +43,26 @@ features = compare.compute(candidates, hospital_accounts,
                            hospital_reimbursement)
 
 print(features)
-#print(matched_results.head())
-df_comb = pd.DataFrame(features)
-#save as csv file
-df_comb.to_csv("output2.csv", index=True)
 
 
+
+"""true_linkage = pd.Series(YOUR_GOLDEN_DATA, index=pd.MultiIndex(YOUR_MULTI_INDEX))
+
+logrg = rl.LogisticRegressionClassifier()
+logrg.fit(features[true_linkage.index], true_linkage)
+
+logrg.predict(features)
+"""
 
 # Sum the comparison results.
 features.sum(axis=1).value_counts().sort_index(ascending=False)
 # Get the potential matches
 potential_matches = features[features.sum(axis=1) > 1].reset_index()
 potential_matches['Score'] = potential_matches.loc[:, 'City':'Hosp_Address'].sum(axis=1)
+#print(matched_results.head())
+df_comb = pd.DataFrame(potential_matches)
+#save as csv file
+df_comb.to_csv("rl-output.csv", index=False)
 potential_matches.head()
 print(hospital_accounts.loc[51216,:])
 print(hospital_reimbursement.loc[268781,:])
