@@ -1,23 +1,32 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 from IdMatcherPredictor import IDMatcher
-import json
 
 app = Flask('__name__')
 
 
-@app.route('/')
-def home():
-    return "Hello world"
+url1 = 'https://github.com/chris1610/pbpython/raw/master/data/hospital_account_info.csv'
+url2 = 'https://raw.githubusercontent.com/chris1610/pbpython/master/data/hospital_reimbursement.csv'
 
-
-@app.route('/predict', methods=['GET'])
+@app.route('/api/v1/predict', methods=['GET'])
 def predict():
-    matcher = IDMatcher("State", "Provider State")
-    url = 'https://github.com/chris1610/pbpython/raw/master/data/hospital_account_info.csv'
-    data = matcher.read_data(url).to_json()
-    print("data", data)
-    j_data = json.load(data)
-    return j_data
+    try:
+        matcher = IDMatcher("State", "Provider State")
+
+        dfA = matcher.read_data(url1)
+        dfB = matcher.read_data(url2)
+        prediction = matcher.predict_id_matches(dfA, dfB, 0.85)
+        pred = prediction.to_json()
+        return jsonify({
+            'status': 'success',
+            'data': pred
+        }), 200
+    except ValueError:
+        return jsonify({
+            'status': 'error',
+            'message': ""
+        }), 200
+
+
 
 
 if __name__ == '__main__':

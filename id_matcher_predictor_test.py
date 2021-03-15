@@ -1,8 +1,9 @@
 import unittest
 
 
-class MyTestCase(unittest.TestCase):
-    def test_something(self):
+class TestIdMatcherPredictor(unittest.TestCase):
+    def setUp(self):
+
         self.assertEqual(True, False)
 
 

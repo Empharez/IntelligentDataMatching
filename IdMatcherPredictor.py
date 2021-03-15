@@ -27,7 +27,7 @@ class IDMatcher:
         """
             columns on each table has to be hardcoded,
             the column name used should be changed.
-            column name used is for test purposes only
+            column name used is for test_id-matcher.py purposes only
         """
         compare.exact('City', 'Provider City', label='City')
         compare.string('Facility Name',
