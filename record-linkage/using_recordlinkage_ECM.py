@@ -33,7 +33,8 @@ compare.string('Address',
 features = compare.compute(candidates, dfA,
                            dfB)
 
-
+print(features.dtypes)
+print(candidates.dtype)
 
 """
 df_comb = pd.DataFrame(features)
