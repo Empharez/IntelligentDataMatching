@@ -4,21 +4,29 @@ import pandas as pd
 import numpy as np
 from sqlalchemy import create_engine
 import datetime
-"""
-engine = create_engine("dbtype+lib://@username:@password@localhost/db_service")
-query = '''SELECT 
-    first_name,
-    last_name,
-    email,
-    phone_number,
-    date_of_birth
-    from table_name'''
-kpi_list = pd.read_sql(query, engine)
-print("data type", kpi_list.dtypes)
-kpi_records = pd.DataFrame(kpi_list)"""
+from cachetools import cached, TTLCache
 
-kpi_record_job = pd.read_pickle('kpi_records.pkl')
 app = Flask('__name__')
+
+cache = TTLCache(maxsize=100, ttl=60)
+
+@cached(cache)
+def read_data():
+    engine = create_engine("db_type+db_lib_sql-alchemy://username:password@host/SID")
+    query = '''SELECT 
+        id,
+        first_name,
+        last_name,
+        email,
+        phone_number,
+        date_of_birth
+        from remita_activation_request'''
+    kpi_list = pd.read_sql(query, engine, index_col='id')
+    print("data type", kpi_list.dtypes)
+    kpi_records = pd.DataFrame(kpi_list)
+    return kpi_records
+
+kpi_records = read_data()
 
 request_body = {
     'first_name': 'Akin',
@@ -31,12 +39,11 @@ request_body = {
 payload = pd.json_normalize(request_body)
 
 
-
 @app.route('/api/v1/predict', methods=['GET'])
 def predict():
     matcher = IDMatcher("date_of_birth", "date_of_birth")
     threshold = 0.85
-    predictions = matcher.find_possible_matches(payload, kpi_record_job, threshold)
+    predictions = matcher.find_possible_matches(payload, kpi_records, threshold)
     return jsonify({
         'status': 'success',
         'data': predictions
