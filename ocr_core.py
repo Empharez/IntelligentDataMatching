@@ -15,7 +15,7 @@ def ocr_core(filename):
     return text
 
 
-# print(ocr_core('images/staff-id-card.jpg'))
+print(ocr_core('images/staff-id-card.jpg'))
 
 # Create the voice_text variable to store the data.
 

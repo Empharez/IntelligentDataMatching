@@ -1,7 +1,6 @@
 import unittest
 import pandas as pd
 import pandas.testing as pd_testing
-import id_matcher
 
 
 class TestIDMatcher(unittest.TestCase):

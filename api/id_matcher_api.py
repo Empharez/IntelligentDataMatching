@@ -1,14 +1,17 @@
-from flask import Flask, jsonify
-from IdMatcherPredictor import IDMatcher
-import pandas as pd
-import numpy as np
-from sqlalchemy import create_engine
 import datetime
+
+import numpy as np
+import pandas as pd
 from cachetools import cached, TTLCache
+from flask import Flask, jsonify
+from sqlalchemy import create_engine
+
+from IdMatcherPredictor import IDMatcher
 
 app = Flask('__name__')
 
 cache = TTLCache(maxsize=100, ttl=60)
+
 
 @cached(cache)
 def read_data():
@@ -25,6 +28,7 @@ def read_data():
     print("data type", kpi_list.dtypes)
     kpi_records = pd.DataFrame(kpi_list)
     return kpi_records
+
 
 kpi_records = read_data()
 
